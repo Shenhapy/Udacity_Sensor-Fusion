@@ -57,7 +57,7 @@ def show_pcl(pcl):
     vis.add_geometry(pcd)
     
     # step 5 : visualize point cloud and keep window open until right-arrow is pressed (key-code 262)
-    # o3d.visualization.draw_geometries([pcd])
+    o3d.visualization.draw_geometries([pcd])
     
     #######
     ####### ID_S1_EX2 END #######     
@@ -105,7 +105,7 @@ def show_range_image(frame, lidar_name):
     
     # step 6 : stack the range and intensity image vertically using np.vstack and convert the result to an unsigned 8-bit integer
     img_range_intensity = np.vstack([img_range,img_intensity])
-    # cv2.imshow('range_intensity_image', img_range_intensity)
+    cv2.imshow('range_intensity_image', img_range_intensity)
     # img_range_intensity = [] # remove after implementing all steps
     #######
     ####### ID_S1_EX1 END #######     
@@ -140,7 +140,7 @@ def bev_from_pcl(lidar_pcl, configs):
     
     # step 3 : perform the same operation as in step 2 for the y-coordinates but make sure that no negative bev-coordinates occur
     lidar_pcl_cpy[:, 1] = np.int_((lidar_pcl_cpy[:, 1] * (configs.bev_width/(configs.lim_y[1]-configs.lim_y[0]))) + (configs.bev_width + 1) / 2)
-    #use np.clip to clip the negative to zero so that no negative bev-coordinates occur
+    #or use np.clip to clip the negative to zero so that no negative bev-coordinates occur
     # lidar_pcl_cpy[lidar_pcl_cpy<0]=0.0
     
     # step 4 : visualize point-cloud using the function show_pcl from a previous task
@@ -175,7 +175,7 @@ def bev_from_pcl(lidar_pcl, configs):
     ## step 5 : temporarily visualize the intensity map using OpenCV to make sure that vehicles separate well from the background
     img_intensity = intensity_map * 255 ##error!
     img_intensity = img_intensity.astype(np.uint8)
-    # cv2.imshow("Intensity Map", img_intensity)
+    cv2.imshow("Intensity Map", img_intensity)
     # cv2.waitKey(0)    
     
     #######
@@ -202,7 +202,7 @@ def bev_from_pcl(lidar_pcl, configs):
     height_map[(lidar_height[:,0].astype(int)),(lidar_height[:,1].astype(int))]=normalized_height
     
     ## step 3 : temporarily visualize the intensity map using OpenCV to make sure that vehicles separate well from the background
-    # cv2.imshow("Height Map", height_map)
+    cv2.imshow("Height Map", height_map)
     # cv2.waitKey(0)
     
     #######

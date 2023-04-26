@@ -199,7 +199,7 @@ def detect_objects(input_bev_maps, model, configs):
             outputs['cen_offset'] = _sigmoid(outputs['cen_offset'])
             # detections size (batch_size, K, 10)
             detections = decode(outputs['hm_cen'], outputs['cen_offset'], outputs['direction'], outputs['z_coor'],
-                                outputs['dim'], K=40)
+                                outputs['dim'], K=10)
             detections = detections.cpu().numpy().astype(np.float32)
             detections = post_processing(detections, configs)
             # detections = post_processing(detections, configs.num_classes, configs.down_ratio, configs.peak_thresh)
@@ -217,15 +217,15 @@ def detect_objects(input_bev_maps, model, configs):
 
     ## step 1 : check whether there are any detections
     # if detections.size != 0:
-    if True:
+    if len(detections) > 0:
         # print("in if")
         ## step 2 : loop over all detections
-        for det in detections:
+        for detect in detections:
             # print("in for")
             ## step 3 : perform the conversion using the limits for x, y and z set in the configs structure
-            _,_x,_y,z,h,w,l,yaw=det
-            x = _y / configs.bev_height * (configs.lim_x[1] - configs.lim_x[0])
-            y = _x / configs.bev_width * (configs.lim_y[1] - configs.lim_y[0]) - (configs.lim_y[1] - configs.lim_y[0])/2.0
+            _,y,x,z,h,w,l,yaw=detect
+            x = x / configs.bev_height * (configs.lim_x[1] - configs.lim_x[0])
+            y = y / configs.bev_width * (configs.lim_y[1] - configs.lim_y[0]) - (configs.lim_y[1] - configs.lim_y[0])/2.0
             w=w/configs.bev_width*(configs.lim_y[1]-configs.lim_y[0])
             l=l/configs.bev_height*(configs.lim_x[1]-configs.lim_x[0])
             
